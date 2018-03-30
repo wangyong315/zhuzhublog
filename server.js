@@ -7,8 +7,9 @@ app.set('view engine', 'html');
 app.set('views', path.resolve('views'));
 // 指定对于html类型的模板使用ejs方法进行渲染
 app.engine('html', require('ejs').__express);
-// 静态文件中间件
-app.user(express.static(path.resolve('node_modules')));
+// 静态文件中间件会拦截客户端对于静态文件如 bootStarp.css 然后在当前目录
+// 查找node_modules,如果能找到则返回客户端
+app.use(express.static(path.resolve('node_modules')));
 let index = require('./routes/index');
 let user = require('./routes/user');
 let article = require('./routes/article');
