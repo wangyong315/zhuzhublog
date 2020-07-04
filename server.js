@@ -2,6 +2,8 @@ let express = require('express');
 let path = require('path');
 let bodyParser = require('body-parser')
 let session = require('express-session')
+// 消息提示中间件
+let flash = require('connect-flash')
 let app = express();
 // 设置模板引擎 html
 app.set('view engine', 'html');
@@ -18,6 +20,9 @@ app.use(session({
   secret: 'wangyong', // 用来加密cookie
   saveUninitialized: true, // 保存未初始化的session
 }))
+// 切记此中间件依赖session,必须放在session下面
+// req.flash(type, value) req.flash(type)
+app.use(flash())
 let index = require('./routes/index');
 let user = require('./routes/user');
 let article = require('./routes/article');

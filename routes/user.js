@@ -21,11 +21,12 @@ router.post('/signup', checkNotLogin, function(req,res){
     let user = req.body; //请求体对象（username password email）
     User.create(user, function (err, doc) {
         if (err) {
+            req.flash('err', '用户注册失败')
             res.redirect('back')
         } else {
+            req.flash('success', '用户注册成功')
             res.redirect('/user/signin')
         }
-        
     })
 });
 
@@ -38,13 +39,16 @@ router.post('/signin', checkNotLogin, function(req,res){
     let user = req.body; // 得到用户提交的表单
     User.findOne(user, function (err, doc) {
         if (err) {
+            req.flash('err', '用户登录失败')
             res.redirect('back')
         } else {
             if (doc) {
                 // 向回话对象中写入属性 user = doc
-               req.session.user = doc;
+                req.flash('success', '用户登录成功')
+                req.session.user = doc;
                res.redirect('/')
             } else {
+                req.flash('err', '用户或者密码错误')
                 res.redirect('back')
             }
         }
