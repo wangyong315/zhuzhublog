@@ -1,6 +1,7 @@
 let express = require('express');
 let router = express.Router();
 let { User } = require('../model')
+let { checkLogin, checkNotLogin } = require('../auth')
 
 // 用户注册 /user/signup
 /**
@@ -11,11 +12,12 @@ let { User } = require('../model')
  * 
 */
 
-router.get('/signup',function(req,res){
+router.get('/signup', checkNotLogin, function(req,res){
     res.render('signup',{title: '注册'});
 });
 
-router.post('/signup',function(req,res){
+// 注册
+router.post('/signup', checkNotLogin, function(req,res){
     let user = req.body; //请求体对象（username password email）
     User.create(user, function (err, doc) {
         if (err) {
@@ -27,11 +29,33 @@ router.post('/signup',function(req,res){
     })
 });
 
-router.get('/signin',function(req,res){
+router.get('/signin', checkNotLogin, function(req,res){
     res.render('signin',{title: '登录'});
 });
-router.get('/signout',function(req,res){
-    res.render('signout',{title: '注销'});
+
+// 登录
+router.post('/signin', checkNotLogin, function(req,res){
+    let user = req.body; // 得到用户提交的表单
+    User.findOne(user, function (err, doc) {
+        if (err) {
+            res.redirect('back')
+        } else {
+            if (doc) {
+                // 向回话对象中写入属性 user = doc
+               req.session.user = doc;
+               res.redirect('/')
+            } else {
+                res.redirect('back')
+            }
+        }
+        
+    })
+});
+
+// 用户退出登录
+router.get('/signout', checkLogin, function(req,res){
+    req.session.user = null
+    res.redirect('/user/signin')
 });
 
 module.exports = router;
