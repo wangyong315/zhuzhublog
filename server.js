@@ -1,5 +1,6 @@
 let express = require('express');
 let path = require('path');
+let bodyParser = require('body-parser')
 let app = express();
 // 设置模板引擎 html
 app.set('view engine', 'html');
@@ -25,6 +26,8 @@ let article = require('./routes/article');
 // app.use(function(req, res, next){
 
 // });
+// 解析客户端提价过啦的请求提, 并转成对象赋给req.body
+app.use(bodyParser.urlencoded({extended:true}))
 app.use('/article',article);
 app.use('/user',user);
 app.use('/',index);
