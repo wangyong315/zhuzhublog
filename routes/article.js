@@ -5,7 +5,7 @@ let { Article } = require('../model')
 let router = express.Router();
 
 router.get('/add', checkLogin, function(req,res){
-    res.render('add',{title: '发表文章'});
+    res.render('article/add',{title: '发表文章'});
 });
 
 router.post('/add', checkLogin, function(req,res){
@@ -21,6 +21,18 @@ router.post('/add', checkLogin, function(req,res){
         }
     })
 
+});
+
+router.get('/detail/:_id', checkLogin, function(req,res){
+    const _id  = req.params._id
+    Article.findById(_id, function(err, article) {
+        if (err) {
+            req.flash('err', err)
+            res.redirect('back')
+        } else {
+            res.render('article/detail',{title: '文章详情', article});
+        }
+    })
 });
 
 module.exports = router;

@@ -46,9 +46,6 @@ app.use(function (req, res, next) {
 * /user/signout  退出
 * /articel/add 发表文章
 */
-// app.use(function(req, res, next){
-
-// });
 // 解析客户端提价过啦的请求提, 并转成对象赋给req.body
 app.use(bodyParser.urlencoded({extended:true}))
 app.use('/article',article);

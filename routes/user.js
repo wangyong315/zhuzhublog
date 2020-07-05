@@ -15,7 +15,7 @@ let { checkLogin, checkNotLogin } = require('../auth')
 */
 
 router.get('/signup', checkNotLogin, function(req,res){
-    res.render('signup',{title: '注册'});
+    res.render('user/signup',{title: '注册'});
 });
 
 // 注册
@@ -37,7 +37,7 @@ router.post('/signup', uploads.single('avatar'), function(req,res){
 });
 
 router.get('/signin', checkNotLogin, function(req,res){
-    res.render('signin',{title: '登录'});
+    res.render('user/signin',{title: '登录'});
 });
 
 // 登录
