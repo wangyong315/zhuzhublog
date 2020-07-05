@@ -14,10 +14,14 @@ app.engine('html', require('ejs').__express);
 // 静态文件中间件会拦截客户端对于静态文件如 bootStarp.css 然后在当前目录
 // 查找node_modules,如果能找到则返回客户端
 app.use(express.static(path.resolve('node_modules')));
+app.use(express.static(path.resolve('public')));
 // 在使用此回话中间件之后，会在请求对象上增加 req.session属性
 app.use(session({
   resave: true, // 每次客户端请求到服务器都会保存到session
   secret: 'wangyong', // 用来加密cookie
+  cookie: {
+    maxAge: 3600*1000
+  },
   saveUninitialized: true, // 保存未初始化的session
 }))
 // 切记此中间件依赖session,必须放在session下面
@@ -29,6 +33,8 @@ let article = require('./routes/article');
 app.use(function (req, res, next) {
   // 真正渲染的事 res.locals
   res.locals.user = req.session.user
+  res.locals.success = req.flash('success').toString()
+  res.locals.err = req.flash('err').toString()
   next()
 })
 // 当客户端请求过来的路径是/user开头的话。会交由user中间件来处理

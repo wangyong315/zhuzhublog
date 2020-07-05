@@ -1,5 +1,7 @@
 let express = require('express');
 let router = express.Router();
+let multer = require('multer')
+let uploads = multer({dest: 'public/uploads'})
 let { User } = require('../model')
 let { checkLogin, checkNotLogin } = require('../auth')
 
@@ -17,8 +19,12 @@ router.get('/signup', checkNotLogin, function(req,res){
 });
 
 // 注册
-router.post('/signup', checkNotLogin, function(req,res){
+router.post('/signup', uploads.single('avatar'), function(req,res){
     let user = req.body; //请求体对象（username password email）
+    console.log('file', req.file);
+    console.log('file-ody', req.body);
+    user.avatar = `/uploads/${req.file.filename}`
+    
     User.create(user, function (err, doc) {
         if (err) {
             req.flash('err', '用户注册失败')
@@ -39,7 +45,7 @@ router.post('/signin', checkNotLogin, function(req,res){
     let user = req.body; // 得到用户提交的表单
     User.findOne(user, function (err, doc) {
         if (err) {
-            req.flash('err', '用户登录失败')
+            req.flash('err', '操作数据库失败')
             res.redirect('back')
         } else {
             if (doc) {
@@ -58,6 +64,7 @@ router.post('/signin', checkNotLogin, function(req,res){
 
 // 用户退出登录
 router.get('/signout', checkLogin, function(req,res){
+    req.flash('success', '用户退出成功')
     req.session.user = null
     res.redirect('/user/signin')
 });
