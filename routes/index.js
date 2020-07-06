@@ -4,10 +4,19 @@ let { User, Article } = require('../model')
 let router = express.Router();
 // 当客户端通过get请求访问/路径的时候，会交由对应的函数来处理
 router.get('/',function(req,res){
-    Article.find({}).populate({ path: 'user', model: User }).exec(function (err, articles) {
+    const {keyword} = req.query;
+    let query = {}
+    if (keyword) {
+        // query.title = new RegExp(keyword)
+        query['$or'] = [
+            {title: new RegExp(keyword)},
+            {content: new RegExp(keyword)}
+        ]
+    }
+    Article.find(query).populate({ path: 'user', model: User }).exec(function (err, articles) {
         console.log('err', err);
         console.log('articles', articles);
-        res.render('index', {title: '首页', articles});
+        res.render('index', {title: '首页', keyword, articles});
     })
 });
 
