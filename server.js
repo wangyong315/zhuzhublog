@@ -33,6 +33,7 @@ let article = require('./routes/article');
 app.use(function (req, res, next) {
   // 真正渲染的事 res.locals
   res.locals.user = req.session.user
+  res.locals.keyword = ''
   res.locals.success = req.flash('success').toString()
   res.locals.err = req.flash('err').toString()
   next()
