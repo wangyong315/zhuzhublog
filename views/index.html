@@ -3,16 +3,15 @@
   <div class="media">
     <div class="media-left">
       <a href="">
-        <img src="" alt="">
+        <img src="<%=article.user.avatar%>" alt="<%=article.user.username%>">
       </a>
     </div>
     <div class="media-body">
       <h3 class="media-heading">
         <a href="article/detail/<%=article._id%>"><%=article.title%></a>
-       
       </h3>
       <p><%=article.content%></p>
-      <p>发表时间：<%=article.createAt.toLocaleString()%></p>
+      <p>发表时间：<%=article.createAt.toLocaleString()%>|作者：<%=article.user.username%></p>
     </div>
   </div>
 <%})%>
