@@ -15,4 +15,18 @@
     </div>
   </div>
 <%})%>
+<nav aria-label="Page navigation example">
+  <ul class="pagination">
+    <%if(pageNum>1){%>
+      <li class="page-item"><a class="page-link" href="/?pageNum=<%=pageNum-1%>">Previous</a></li>
+    <%}%>
+    <%
+      for(let i = 1; i<= totalPages; i++){%>
+        <li class="page-item <%=i===pageNum?'active':''%>"><a class="page-link" href="/?pageNum=<%=i%>"><%=i%></a></li>
+    <%}%>
+    <%if(pageNum<totalPages){%>
+      <li class="page-item"><a class="page-link" href="/?pageNum=<%=pageNum+1%>">Next</a></li>
+    <%}%>
+  </ul>
+</nav>
 <%- include includes/footer.html%>
