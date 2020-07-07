@@ -2,6 +2,7 @@ let express = require('express');
 let path = require('path');
 let bodyParser = require('body-parser')
 let session = require('express-session')
+let MongoStore = require('connect-mongo')(session)
 // 消息提示中间件
 let flash = require('connect-flash')
 let app = express();
@@ -23,6 +24,9 @@ app.use(session({
     maxAge: 3600*1000
   },
   saveUninitialized: true, // 保存未初始化的session
+  store: new MongoStore({
+    url: 'mongodb://127.0.0.1/2020blog'
+  })
 }))
 // 切记此中间件依赖session,必须放在session下面
 // req.flash(type, value) req.flash(type)
